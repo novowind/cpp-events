@@ -1,4 +1,5 @@
 #summary Frequently asked questions.
 
-#. Q: Why "events/delegates" and not "signals/slots"?
-   A: First of all for personal historical reasons - first time when I met this mechanism was short experience of GUI programming with old and dirty VB6. But finally I've decided to use Microsoft's terminology instead of Trolltech's one in order to avoid name conflicts with existing implementations.
+*1. Why "_events/delegates_" and not "_signals/slots_"?*
+
+First of all for personal historical reasons - first time when I met this mechanism was short experience of GUI programming with old and dirty VB6. But finally I've decided to use Microsoft's terminology instead of Trolltech's one in order to avoid name conflicts with existing implementations.
