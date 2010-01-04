@@ -1,0 +1,8 @@
+#summary Comparison of another implementations of event/delegate mechanism
+
+= Events and delegates in C# =
+= Signals and slots in Qt =
+= Boost.Signals =
+= LibSigC++ =
+= SigSlot =
+= Boost.Signals2 =
