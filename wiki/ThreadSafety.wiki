@@ -1,0 +1,17 @@
+#summary This page explains how thread-safety is achieved in the Cpp::Events library.
+
+= Introduction =
+
+Add your content here.
+
+<wiki:toc max_depth="1" />
+
+= Reference counting =
+
+= Mutexes =
+
+= Platform-specific notes =
+
+== Win32 ==
+
+== POSIX ==
