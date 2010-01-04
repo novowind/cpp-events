@@ -1,4 +1,4 @@
-#summary Let's go!.
+#summary Let's go!
 
 = Introduction =
 
