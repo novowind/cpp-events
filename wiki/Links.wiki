@@ -1,0 +1,19 @@
+#summary Useful links on the subject.
+
+1. Ivan Krivyakov. C# Delegates And Events in Depth.<br>
+http://www.ikriv.com/en/prog/info/dotnet/Delegates.html
+
+2. Qt 6: Signals and Slots<br>
+http://doc.trolltech.com/4.6/signalsandslots.html
+
+3. Douglas Gregor. Boost.Signals<br>
+http://www.boost.org/doc/libs/1_41_0/doc/html/signals.html
+
+4. Carl Nygard. Boost.Signals vs libsigc++<br>
+http://www.3sinc.com/opensource/boost.bind-vs-sigc2.html
+
+5. Sarah Tomposon. SigSlot Library Documentation<br>
+http://sigslot.sourceforge.net/sigslot.pdf
+
+6. The Java^TM^ Language Team. About Microsoft's "Delegates"<br>
+http://java.sun.com/docs/white/delegates.html
