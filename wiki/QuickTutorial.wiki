@@ -1,13 +1,54 @@
 #summary Let's go!
 
-= Introduction =
+= Declaring Events =
 
-Add your content here.
+Event object has two interfaces - one for invocation and another for managing connections. The first one is used by sender object to perform notifications. The second one is used by receiver objects (or by the third party) to connect and disconnect event handlers.
 
+Unlike Boost.Signals and other template-based implementations, Cpp::Events separates these two interfaces. So event in Cpp::Events implementation is represented by the two entities.
 
-= Details =
+The first one is a member variable of template class {{{Cpp::Event<>}}}. The second one is a member function that takes no arguments and returns temporary object of class {{{Cpp::EventRef<>}}} constructed from a reference to that variable. The variable is an event implementation itself. The function is a provider of the connection management interface. To draw an analogy with C#, the function is an event itself, and the variable is an underlying multicast delegate.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+{{{
+class Button : public Widget
+{
+public:
+    Button(Widget * parentWidget);
+
+    // Event connection interface
+    Cpp::EventRef<> clicked() { return clicked_; }
+private:
+    // Event implementation
+    Cpp::Event clicked_;
+};
+}}}
+
+= Connecting Events =
+
+Events are connected to event handlers. In Cpp::Events event handlers are member functions bound to the specific object. Such pair is called a delegate. For some reasons there are no built-in delegates in C++. Internally Cpp::Events uses hackish [http://www.codeproject.com/KB/cpp/FastDelegate.aspx delegate library] by Don Clugston, but when making connections pointer to object and pointer to member function are passed as separate values.
+
+Connection is performed by object of the {{{Cpp::ConnectionScope}}} class. This object determines lifetime of the established connection - when connection scope object dies all related connections are automatically broken.
+
+{{{
+class Dialog : public Widget
+{
+public:
+    Dialog(Widget * parentWidget)
+        : Widget(parentWidget)
+    {
+        okButton_.reset(new Button(this));
+        okButton_->setGeometry(100, 200, 100, 50);
+        scope_.connect(okButton_->clicked(), this, &Dialog::accept);
+        
+        cancelButton_.reset(new Button(this));
+        cancelButton_->setGeometry(300, 200, 100, 50);
+        scope_.connect(cancelButton_->clicked(), this, &Dialog::reject);
+    }
+private:
+    std::auto_ptr<Button> okButton_;
+    std::auto_ptr<Button> cancelButton_;
+    Cpp::ConnectionScope scope_;
+
+    void accept();
+    void reject();
+};
+}}}
