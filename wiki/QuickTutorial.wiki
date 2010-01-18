@@ -2,6 +2,27 @@
 
 <wiki:toc max_depth="1" />
 
+= Initialization =
+
+CppEvents stores some data in thread-local storage and this data must be initialized before library can be used. For that purpose there are four static functions in class {{{Cpp::Threading}}}:
+  * {{{void Cpp::Threading::constructProcessData()}}};
+  * {{{void Cpp::Threading::destructProcessData()}}};
+  * {{{void Cpp::Threading::constructThreadData()}}};
+  * {{{void Cpp::Threading::destructThreadData()}}};
+
+{{{
+int main(int argc, char * argv[])
+{
+    Cpp::Threading::constructProcessData();
+    
+    int retVal = ...
+
+    Cpp::Threading::destructProcessData();
+
+    return retVal;
+}
+}}}
+
 = Declaring Events =
 
 Event object has two interfaces - one for invocation and another for managing connections. The first one is used by sender object to perform notifications. The second one is used by receiver objects (or by the third party) to connect and disconnect event handlers.
