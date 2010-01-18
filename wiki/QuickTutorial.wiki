@@ -1,5 +1,7 @@
 #summary Let's go!
 
+<wiki:toc max_depth="1" />
+
 = Declaring Events =
 
 Event object has two interfaces - one for invocation and another for managing connections. The first one is used by sender object to perform notifications. The second one is used by receiver objects (or by the third party) to connect and disconnect event handlers.
