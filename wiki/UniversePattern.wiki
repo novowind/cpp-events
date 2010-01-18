@@ -1,0 +1,18 @@
+#summary Explanation of the Universe design pattern.
+
+= Introduction =
+
+This pattern is not directly related to the topic of events, but since Singletons problem was mentioned in documentation several times, I decided to describe this pattern here.
+
+= The Problem =
+
+Very nice explanation of the problem can be found [http://blogs.msdn.com/scottdensmore/archive/2004/05/25/140827.aspx here]. I don't think I would write it better.
+
+= Legal Singletons =
+
+Are singletons perfectly evil? No, they are aren't. There are some cases when usage of singletons is perfectly safe and legal. But how to distinguish them? After some thinking about this topic I've found a nice formal rule that can be used to determine if usage of singleton is legal or not in some situation. The rule says *"Singletons should be stateless*.
+
+= The Pattern =
+What is a singleton? It is an object that exists in singular in some scope. The key words here are *"in some scope"*. The idea of the pattern is to encapsulate that scope into an object and aggregate singleton into it.
+
+
