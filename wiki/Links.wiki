@@ -3,20 +3,23 @@
 1. Don Clugston. Member Function Pointers and the Fastest Possible C++ Delegates<br>
 http://www.codeproject.com/KB/cpp/FastDelegate.aspx
 
-2. Ivan Krivyakov. C# Delegates And Events in Depth.<br>
+2. Sergey Ryazanov. The Impossibly Fast C++ Delegates<br>
+http://www.codeproject.com/KB/cpp/ImpossiblyFastCppDelegate.aspx
+
+3. Ivan Krivyakov. C# Delegates And Events in Depth.<br>
 http://www.ikriv.com/en/prog/info/dotnet/Delegates.html
 
-3. Qt 6: Signals and Slots<br>
+4. Qt 6: Signals and Slots<br>
 http://doc.trolltech.com/4.6/signalsandslots.html
 
-4. Douglas Gregor. Boost.Signals<br>
+5. Douglas Gregor. Boost.Signals<br>
 http://www.boost.org/doc/libs/1_41_0/doc/html/signals.html
 
-5. Carl Nygard. Boost.Signals vs libsigc++<br>
+6. Carl Nygard. Boost.Signals vs libsigc++<br>
 http://www.3sinc.com/opensource/boost.bind-vs-sigc2.html
 
-6. Sarah Tomposon. SigSlot Library Documentation<br>
+7. Sarah Tomposon. SigSlot Library Documentation<br>
 http://sigslot.sourceforge.net/sigslot.pdf
 
-7. The Java^TM^ Language Team. About Microsoft's "Delegates"<br>
+8. The Java^TM^ Language Team. About Microsoft's "Delegates"<br>
 http://java.sun.com/docs/white/delegates.html
