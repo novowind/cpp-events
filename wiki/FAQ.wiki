@@ -6,4 +6,13 @@ First of all for personal historical reasons - first time when I met this mechan
 
 *2. Why was support for static functions disabled ?*
 
-Usage of static functions as an event handlers is a symptom of a bad project design. In most cases (almost always) events handlers perform actions that require access to some state variables. In case of member functions, the {{{this}}} pointer is a legal way to supply function with access to state variables. In case of static functions state variables are accessed with use of global variables and non-stateless singletones. Both are considered to be dangerous and messy.
+Usage of static functions as an event handlers is a symptom of a bad project design. In most cases (almost always) events handlers perform actions that require access to some state variables. In case of member functions, the {{{this}}} pointer is a legal way to supply function with access to state variables. In case of static functions state variables are accessed with use of global variables and non-stateless singletons. Both are considered to be dangerous and messy.
+
+*3. Can I use events in global objects ?*
+
+Yes you can, but this is strongly discouraged. If your object fires or handles events then most likely it is not stateless and thus should not be global. Try to review your design, maybe UniversePattern will help you.
+
+If you still wish to use events with global objects, then you should:
+  # Define you own singleton class that calls {{{Cpp::Threading::constructProcessData()}}} in constructor and {{{Cpp::Threading::destructProcessData()}}} in destructor (you can inherit from Cpp::Threading::ProcessInit or aggregate it).
+  # Define helper class that accesses singleton instance in constructor (this invokes singleton's constructor, if it has not been invoked yet).
+  # For all your global objects use this helper class as a base class or the first(!) field.
