@@ -8,6 +8,8 @@ Unlike Boost.Signals and other template-based implementations, Cpp::Events separ
 
 The first one is a member variable of template class {{{Cpp::Event<>}}}. The second one is a member function that takes no arguments and returns temporary object of class {{{Cpp::EventRef<>}}} constructed from a reference to that variable. The variable is an event implementation itself. The function is a provider of the connection management interface. To draw an analogy with C#, the function is an event itself, and the variable is an underlying multicast delegate.
 
+=== Example 1 ===
+Button class with 'clicked' event.
 {{{
 class Button : public Widget
 {
@@ -16,18 +18,32 @@ public:
 
     // Event connection interface
     Cpp::EventRef<> clicked() { return clicked_; }
+protected:
+    virtual void mouseDown(MouseParams const & mouseParams);
 private:
     // Event implementation
     Cpp::Event clicked_;
 };
+
+void Button::mouseDown(MouseParams const & mouseParams)
+{
+    if(mouseParams.button() == MouseParams::LeftButton)
+    {
+        clicked_.fire();
+    }
+}
 }}}
 
 = Connecting Events =
 
 Events are connected to event handlers. In Cpp::Events event handlers are member functions bound to the specific object. Such pair is called a delegate. For some reasons there are no built-in delegates in C++. Internally Cpp::Events uses hackish [http://www.codeproject.com/KB/cpp/FastDelegate.aspx delegate library] by Don Clugston, but when making connections pointer to object and pointer to member function are passed as separate values.
 
-Connection is performed by object of the {{{Cpp::ConnectionScope}}} class. This object determines lifetime of the established connection - when connection scope object dies all related connections are automatically broken.
+Event is connected to delegate with the help of the object of {{{Cpp::ConnectionScope}}} class. That object determines lifetime of the established connection - when connection scope object dies all related connections are automatically broken.
 
+Connection is established by {{{connect()}}} method of the {{{Cpp::ConnectionScope}}}. It is overloaded function that requires at least three arguments. The first one is the {{{Cpp::EventRef<>}}} object, the second one is a pointer to the receiver object and the third one is a pointer to the member of the receiver object.
+
+=== Example 2 ===
+Dialog class with with 'Ok' and 'Cancel' buttons.
 {{{
 class Dialog : public Widget
 {
@@ -43,6 +59,7 @@ public:
         cancelButton_->setGeometry(300, 200, 100, 50);
         scope_.connect(cancelButton_->clicked(), this, &Dialog::reject);
     }
+
 private:
     std::auto_ptr<Button> okButton_;
     std::auto_ptr<Button> cancelButton_;
@@ -50,5 +67,132 @@ private:
 
     void accept();
     void reject();
+};
+}}}
+
+= Arguments =
+
+Events can have arguments. Types of arguments are specified as arguments for template classes {{{Cpp::Event<>}}} and {{{Cpp::EventRef<>}}}. 
+
+=== Example 3 ===
+Checkbox class.
+{{{
+class CheckBox : public Widget
+{
+public:
+   CheckBox(Widget * parentWidget);
+
+   bool isChecked() const { return isChecked_; }
+   void setChecked(bool b);
+
+   Cpp::EventRef<bool> toggled() { return toggled_; }
+private:
+   bool isChecked_;
+   Cpp::EventRef<bool> toggled_;
+};
+
+void CheckBox::setChecked(bool b)
+{
+    isChecked_ = b;
+    repaint();
+    toggled_.fire(b);
+}
+}}}
+
+No type transformations are applied to the argument types. If argument should be passed by const reference instead of copying it, then const reference type should be used in {{{Cpp::Event<>}}} and {{{Cpp::EventRef<>}}}.
+
+=== Example 4 ===
+ComboBox class.
+{{{
+class ComboBox : public Widget
+{
+public:
+    ComboBox(Widget * parentWidget);
+
+    void appendItem(String const & item);
+    void insertItem(int index, String const & item);
+    void removeItem(int index);
+    int findItem(String const & item);
+
+    int currentItem() const;
+    void setCurrentItem(int i);
+
+    Cpp::EventRef<int, String const &> currentItemChanged();
+private:
+    std::vector<String> items_;
+    int currentItemIndex_;
+    Cpp::EventRef<int, String const &> currentItemChanged_;
+};
+
+void ComboBox::setCurrentItem(int i)
+{
+    currentItemIndex_ = i;
+    repaint();
+    currentItemChanged_.fire(i, items_[i]);
+}
+}}}
+
+= Parametrization =
+
+Events can have arguments. Types of arguments are specified as arguments for template classes {{{Cpp::Event<>}}} and {{{Cpp::EventRef<>}}}.
+
+= Event Chaining =
+
+= Virtual Events =
+
+Function that provides connection management interface for the event can be virtual and abstract (pure virtual) as any other instance member function. This effectively makes event virtual or abstract. 
+
+=== Example 5 ===
+Worker thread interface.
+{{{
+class IWorkerThread
+{
+protected:
+    IWorkerThread() {}
+    virtual ~IWorkerThread() {}
+public:
+    virtual void start() = 0;
+    virtual void cancel() = 0;
+
+    Cpp::EventRef<float> progressChanged() = 0;
+    Cpp::EventRef<> finished() = 0;
+};
+}}}
+
+Virtual events can be redefined in derived classes.
+
+=== Example 6 ===
+Event redefinition example.
+{{{
+class BaseClass
+{
+public:
+    virtual Cpp::EventRef<int> somethingHappened() { return somethingHappened_; }
+private:
+    Cpp::Event<int> somethingHappened_;
+};
+
+class DerivedClass : public BaseClass
+{
+public:
+    DerivedClass()
+    {
+        scope_.connect(BaseClass::somethingHappened(), this, &DerivedClass::somethingHappenedHook);
+    }
+    
+    virtual Cpp::EventRef<int> somethingHappened() { return somethingHappened_; }
+private:
+    Cpp::Event<int> somethingHappened_;
+    Cpp::ConnectionScope scope_;
+
+    bool filterOutFunction(int value) const;
+
+    void somethingHappenedHook(int value)
+    {
+        if(!filterOutFunction(value))
+        {
+            somethingHappened_.fire(value);
+        }
+    }
 };
 }}}
