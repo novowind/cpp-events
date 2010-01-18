@@ -10,9 +10,7 @@ Very nice explanation of the problem can be found [http://blogs.msdn.com/scottde
 
 = Legal Singletons =
 
-Are singletons perfectly evil? No, they are aren't. There are some cases when usage of singletons is perfectly safe and legal. But how to distinguish them? After some thinking about this topic I've found a nice formal rule that can be used to determine if usage of singleton is legal or not in some situation. The rule says *"Singletons should be stateless*.
+Are singletons perfectly evil? No, they are aren't. There are some cases when usage of singletons is perfectly safe and legal. But how to distinguish them? After some thinking about this topic I've found a nice formal rule that can be used to determine if usage of singleton is legal or not in some situation. The rule says *"Singletons should be stateless"*.
 
 = The Pattern =
-What is a singleton? It is an object that exists in singular in some scope. The key words here are *"in some scope"*. The idea of the pattern is to encapsulate that scope into an object and aggregate singleton into it.
-
-
+What is a singleton? It is an object that exists in singular in some scope. The key words here are _"in some scope"_. The idea of the pattern is to encapsulate that scope into an object and aggregate singleton into it.
