@@ -1,6 +1,6 @@
 #summary Let's go!
 
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="2" />
 
 = Initialization =
 
@@ -161,11 +161,14 @@ void ComboBox::setCurrentItem(int i)
 }
 }}}
 
-= Parametrization =
+= Signature Transformation =
 
-Events can have arguments. Types of arguments are specified as arguments for template classes {{{Cpp::Event<>}}} and {{{Cpp::EventRef<>}}}.
+== Parametrization ==
+
+== Discarding Arguments ==
 
 = Event Chaining =
+
 
 = Virtual Events =
 
