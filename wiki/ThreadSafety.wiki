@@ -19,5 +19,5 @@
 In order to port CppEvents to different threading API, the following should be done:
   # Create new directory for platform-specific files under 'Cpp/Events/' directory.
   # Modify file 'Cpp/Events/Config.hpp' and add preprocessor code for detecting your platform and setting {{{PLATFORM_DIR}}} macro to the name of directory for platform-specific files.
-  # Implement {{{AtomicReferenceCounter}}} class in the file 'PlatformSpecific_AtomicReferenceCounter.hpp' using corresponding API for atomic operations.
-  # Implement static functions of the {{{Threading}}} class in the file 'PlatformSpecific_Threading.inl'
+  # Implement {{{AtomicReferenceCounter}}} class in the file 'AtomicReferenceCounter.hpp.inl' using corresponding API for atomic operations.
+  # Implement static functions of the {{{Threading}}} class in the file 'Threading.cpp.inl'
