@@ -1,4 +1,4 @@
-#summary This page explains how thread-safety is achieved in the Cpp::Events library.
+#summary This page explains how thread-safety is achieved in the CppEvents library.
 
 <wiki:toc max_depth="1" />
 
