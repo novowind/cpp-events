@@ -129,7 +129,7 @@ void CheckBox::setChecked(bool b)
 
 No type transformations are applied to the argument types specified in the declaration. If argument should be passed by const reference instead of copying it, then const reference type should be used in {{{Cpp::Event<>}}} and {{{Cpp::EventRef<>}}}.
 
-*Example 6.* ComboBox class.
+*Example 6.* Combo box class.
 {{{
 class ComboBox : public Widget
 {
@@ -270,7 +270,7 @@ private:
 
 Event can have more arguments then event handler requires. In this case some right-most event arguments can be discarded.
 
-*Example 9.* Form that handles ComboBox event discarding second argument.
+*Example 9.* Form that handles combo box event discarding second argument.
 {{{
 class FormWithComboBox : public Widget
 {
@@ -292,9 +292,26 @@ private:
 
 = Event Chaining =
 
-*Example 10.* Event chaining example.
+Event handler can be method of any class and event classes are not an exception. The {{{fire()}}} method of the {{{Cpp::Event<>}}} class can be used as an event handler as well. This means that one event can be connected to the another. This technique is called _event chaining_.
+
+*Example 10.* Find options dialog with case sensitivity check box.
 {{{
-// ...
+class FindOptionsDialog : public Widget
+{
+public:
+    FindOptionsDialog(Widget * parentWidget)
+        : Widget(parentWidget)
+    {
+        caseSensitivity_.reset(new CheckBox(this));
+        scope_.connect(caseSensitivity_->toggled(), &caseSensitivityChanged_, &Cpp::Event<bool>::fire);
+    }
+
+    Cpp::EventRef<bool> caseSensitivityChanged() { return caseSensitivityChanged_; }
+private:
+    std::auto_ptr<CheckBox> caseSensitivity_;
+    Cpp::Event<bool> caseSensitivityChanged_;
+    Cpp::ConnectionScope scope_;
+};
 }}}
 
 = Virtual Events =
