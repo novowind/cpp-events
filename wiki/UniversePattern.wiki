@@ -23,6 +23,8 @@ Very often universe object also serves as a factory for its citizens.
 
 Citizens of the universe can be hidden from the external world or can be part of the interface with the external world.
 
+The great benefit of the Universe pattern is that it clarifies all dependencies of the domain made from the Universe object with all its contents and concentrates them in the public interface of the Universe class. (This assumes that you do not spoil this effect by introducing back-door dependencies in the form of global variables, illegal singletons or something else).
+
 = Example =
 {{{
 // Universe internal interface
