@@ -6,6 +6,7 @@
 
 Library stores some data in thread-local storage and this data must be initialized before library can be used. Per-process initialization and deinitialization is done by creating instance of the class {{{Cpp::Threading::ProcessInit}}} on the stack of the {{{main()}}} function. This class does nothing more than invoking static function {{{Cpp::Threading::constructProcessData()}}} in constructor and {{{Cpp::Threading::destructProcessData()}}} in destructor, but it is preferable to use {{{Cpp::Threading::ProcessInit}}} class instead of calling these functions directly, because it is exception-safe.
 
+*Example 1.* Per-process library initialization.
 {{{
 int main(int argc, char * argv[])
 {
@@ -19,6 +20,7 @@ int main(int argc, char * argv[])
 
 For threads other than the main one, library must be initialized separately. The {{{Cpp::Threading::ThreadInit}}} class is used or this. In the same way as {{{Cpp::Threading::ProcessInit}}} does, this class does nothing more than invoking static function {{{Cpp::Threading::constructThreadData()}}} in constructor and {{{Cpp::Threading::destructThreadData()}}} in destructor.
 
+*Example 2.* Per-thread library initialization.
 {{{
 void myThreadProc(void * threadParam)
 {
@@ -37,8 +39,7 @@ Unlike Boost.Signals and other template-based implementations, Cpp::Events separ
 
 The first one is a member variable of template class {{{Cpp::Event<>}}}. The second one is a member function that takes no arguments and returns temporary object of class {{{Cpp::EventRef<>}}} constructed from a reference to that variable. The variable is an event implementation itself. The function is a provider of the connection management interface. To draw an analogy with C#, the function is an event itself, and the variable is an underlying multicast delegate.
 
-=== Example 1 ===
-Button class with 'clicked' event.
+*Example 3.* Button class with 'clicked' event.
 {{{
 class Button : public Widget
 {
@@ -71,8 +72,7 @@ Event is connected to delegate with the help of the object of {{{Cpp::Connection
 
 Connection is established by {{{connect()}}} method of the {{{Cpp::ConnectionScope}}}. It is overloaded function that requires at least three arguments. The first one is the {{{Cpp::EventRef<>}}} object, the second one is a pointer to the receiver object and the third one is a pointer to the member of the receiver object.
 
-=== Example 2 ===
-Dialog class with with 'Ok' and 'Cancel' buttons.
+*Example 4.* Dialog class with with 'Ok' and 'Cancel' buttons.
 {{{
 class Dialog : public Widget
 {
@@ -103,8 +103,7 @@ private:
 
 Events can have arguments. Types of arguments are specified as arguments for template classes {{{Cpp::Event<>}}} and {{{Cpp::EventRef<>}}}. 
 
-=== Example 3 ===
-Checkbox class.
+*Example 5.* Checkbox class.
 {{{
 class CheckBox : public Widget
 {
@@ -128,10 +127,9 @@ void CheckBox::setChecked(bool b)
 }
 }}}
 
-No type transformations are applied to the argument types. If argument should be passed by const reference instead of copying it, then const reference type should be used in {{{Cpp::Event<>}}} and {{{Cpp::EventRef<>}}}.
+No type transformations are applied to the argument types specified in the declaration. If argument should be passed by const reference instead of copying it, then const reference type should be used in {{{Cpp::Event<>}}} and {{{Cpp::EventRef<>}}}.
 
-=== Example 4 ===
-ComboBox class.
+*Example 6.* ComboBox class.
 {{{
 class ComboBox : public Widget
 {
@@ -165,17 +163,145 @@ void ComboBox::setCurrentItem(int i)
 
 == Parametrization ==
 
+In some cases one event handler can be connected to several different events and event handler should distinguish them. One possible solution is to provide event handler with a pointer to the event object itself or to the object that contains the event. But CppEvents uses more flexible approach. It allows to use values of arbitrary types as an identifier of the event source. These values are passed to the event handler as left-most arguments.
+
+The main benefit of this approach is that parametrization is performed in the terms of the event handler, not the event source.
+
+*Note!* Parameters are assigned with the connection. If parameters are objects, then they will be destructed when connection is broken. And this may occur in the context of the different thread. Avoid using objects with thread-affinity as connection parameters.
+
+*Example 7.* View with sorting menu.
+{{{
+class AbstractModel
+{
+public:
+    enum SortingMethod
+    {
+        SortByName,
+        SortBySize,
+        SortByDate,
+        SortingMethodCount
+    };
+
+    // ...
+    
+    virtual void sort(SortingMethod method) = 0;
+
+    // ...
+};
+
+class ViewWithMenu : public Widget, public AbstractView
+{
+public:
+    ViewWithMenu(Widget * parentWidget, AbstractModel * model)
+        : Widget(parentWidget)
+        , model_(model)
+    {
+        menu_.reset(new Menu(this, "Sorting"));
+        {
+            MenuItem * item = new MenuItem("&Name");
+            scope_.connect(item->activated(), model_, &AbstractModel::sort, AbstractModel::SortByName);
+            menu_->insertItem(item);
+        }
+        {
+            MenuItem * item = new MenuItem("&Size");
+            scope_.connect(item->activated(), model_, &AbstractModel::sort, AbstractModel::SortBySize);
+            menu_->insertItem(item);
+        }
+        {
+            MenuItem * item = new MenuItem("&Date");
+            scope_.connect(item->activated(), model_, &AbstractModel::sort, AbstractModel::SortByDate);
+            menu_->insertItem(item);
+        }
+    }
+private:
+    std::auto_ptr<Menu> menu_;
+    AbstractModel * model_;
+    Cpp::ConnectionScope scope_;       
+};
+
+}}}
+
+== Argument Conversion ==
+
+Event and event handler may have different (but convertible) types of arguments. In this case special wrapper is created automatically during connection.
+
+*Example 8.* Example of argument conversion.
+{{{
+
+class SenderClass
+{
+public:
+    Cpp::EventRef<int> intEvent() { return intEvent_; }
+    Cpp::EventRef<String const &> stringEvent() { return stringEvent_; }
+private:
+    Cpp::Event<int> intEvent_;
+    Cpp::Event<String const &> stringEvent_;
+};
+
+class RecieverClass
+{
+public:
+    void intHandler(unsigned);
+    void stringCopyHandler(String);
+    void stringHandler(std::string const &);
+};
+
+class ConnectorClass
+{
+public:
+    ConnectorClass()
+    {
+        // "int" to "unsigned" conversion
+        scope_.connect(sender_.intEvent(), &reciever_, &RecieverClass::intHandler);
+        // "String const &" to "String" conversion
+        scope_.connect(sender_.stringEvent(), &reciever_, &RecieverClass::stringCopyHandler);
+        // "String const &" to "std::string const &" conversion
+        scope_.connect(sender_.stringEvent(), &reciever_, &RecieverClass::stringHandler);
+    }
+private:
+    SenderClass sender_;
+    RecieverClass reciever_;
+    Cpp::ConnectionScope scope_;
+};
+
+}}}
+
 == Discarding Arguments ==
+
+Event can have more arguments then event handler requires. In this case some right-most event arguments can be discarded.
+
+*Example 9.* Form that handles ComboBox event discarding second argument.
+{{{
+class FormWithComboBox : public Widget
+{
+public:
+    FormWithComboBox(Widget * parentWidget)
+        : Widget(parentWidget)
+    {
+        comboBox_.reset(new ComboBox(this));
+        // Second argument will be discarded
+        scope_.connect(comboBox_->currentItemChanged(), this, &FormWithComboBox::comboBoxItemChanged);
+    }
+private:
+    std::auto_ptr<ComboBox> comboBox_;
+    Cpp::ConnectionScope scope_;
+
+    void comboBoxItemChanged(int itemNo);
+};
+}}}
 
 = Event Chaining =
 
+*Example 10.* Event chaining example.
+{{{
+// ...
+}}}
 
 = Virtual Events =
 
 Function that provides connection management interface for the event can be virtual and abstract (pure virtual) as any other instance member function. This effectively makes event virtual or abstract. 
 
-=== Example 5 ===
-Worker thread interface.
+*Example 11.* Worker thread interface.
 {{{
 class IWorkerThread
 {
@@ -193,8 +319,7 @@ public:
 
 Virtual events can be redefined in derived classes.
 
-=== Example 6 ===
-Event redefinition example.
+*Example 12.* Event redefinition example.
 {{{
 class BaseClass
 {
