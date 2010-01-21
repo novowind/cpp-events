@@ -4,22 +4,28 @@
 
 = Initialization =
 
-CppEvents stores some data in thread-local storage and this data must be initialized before library can be used. For that purpose there are four static functions in class {{{Cpp::Threading}}}:
-  * {{{void Cpp::Threading::constructProcessData()}}};
-  * {{{void Cpp::Threading::destructProcessData()}}};
-  * {{{void Cpp::Threading::constructThreadData()}}};
-  * {{{void Cpp::Threading::destructThreadData()}}};
+Library stores some data in thread-local storage and this data must be initialized before library can be used. Per-process initialization and deinitialization is done by creating instance of the class {{{Cpp::Threading::ProcessInit}}} on the stack of the {{{main()}}} function. This class does nothing more than invoking static function {{{Cpp::Threading::constructProcessData()}}} in constructor and {{{Cpp::Threading::destructProcessData()}}} in destructor, but it is preferable to use {{{Cpp::Threading::ProcessInit}}} class instead of calling these functions directly, because it is exception-safe.
 
 {{{
 int main(int argc, char * argv[])
 {
-    Cpp::Threading::constructProcessData();
+    Cpp::Threading::ProcessInit processInit;
+
+    // ...
+
+    return 0;
+}
+}}}
+
+For threads other than the main one, library must be initialized separately. The {{{Cpp::Threading::ThreadInit}}} class is used or this. In the same way as {{{Cpp::Threading::ProcessInit}}} does, this class does nothing more than invoking static function {{{Cpp::Threading::constructThreadData()}}} in constructor and {{{Cpp::Threading::destructThreadData()}}} in destructor.
+
+{{{
+void myThreadProc(void * threadParam)
+{
+    Cpp::Threading::ThreadInit threadInit;
     
-    int retVal = ...
+    // all the thread stuff goes here ...
 
-    Cpp::Threading::destructProcessData();
-
-    return retVal;
 }
 }}}
 
