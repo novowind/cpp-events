@@ -314,11 +314,30 @@ private:
 };
 }}}
 
+Similar effect can be achieved by reusing connection interface of the original event.
+
+*Example 11.* Find options dialog with case sensitivity check box (version 2).
+{{{
+class FindOptionsDialog : public Widget
+{
+public:
+    FindOptionsDialog(Widget * parentWidget)
+        : Widget(parentWidget)
+    {
+        caseSensitivity_.reset(new CheckBox(this));
+    }
+
+    Cpp::EventRef<bool> caseSensitivityChanged() { return caseSensitivity_->toggled(); }
+private:
+    std::auto_ptr<CheckBox> caseSensitivity_;
+};
+}}}
+
 = Virtual Events =
 
 Function that provides connection management interface for the event can be virtual and abstract (pure virtual) as any other instance member function. This effectively makes event virtual or abstract. 
 
-*Example 11.* Worker thread interface.
+*Example 12.* Worker thread interface.
 {{{
 class IWorkerThread
 {
@@ -336,7 +355,7 @@ public:
 
 Virtual events can be redefined in derived classes.
 
-*Example 12.* Event redefinition example.
+*Example 13.* Event redefinition example.
 {{{
 class BaseClass
 {
