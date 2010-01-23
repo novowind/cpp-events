@@ -17,7 +17,7 @@ If you still wish to use events with global objects, then you should:
   # Define helper class that accesses singleton instance in constructor (this invokes singleton's constructor, if it has not been invoked yet).
   # For all your global objects use this helper class as a base class or the first(!) field.
 
-*4. What is does MCS mean?*
+*4. What does MCS mean?*
 
 Library is written in C++03 and does not use C++0x features. For generating
 variadic templates custom preprocessor was written. It was named MCS, that
