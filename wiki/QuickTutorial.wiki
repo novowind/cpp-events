@@ -4,13 +4,15 @@
 
 = Initialization =
 
-Library stores some data in thread-local storage and this data must be initialized before library can be used. Per-process initialization and deinitialization is done by creating instance of the class {{{Cpp::Threading::ProcessInit}}} on the stack of the {{{main()}}} function. This class does nothing more than invoking static function {{{Cpp::Threading::constructProcessData()}}} in constructor and {{{Cpp::Threading::destructProcessData()}}} in destructor, but it is preferable to use {{{Cpp::Threading::ProcessInit}}} class instead of calling these functions directly, because it is exception-safe.
+Library stores some data in thread-local storage and this data must be initialized before library can be used. Per-process initialization and deinitialization is done by creating instance of the class {{{Cpp::Events::ProcessInit}}} on the stack of the {{{main()}}} function. This class does nothing more than invoking static function {{{Cpp::Events::constructProcessData()}}} in constructor and {{{Cpp::Events::destructProcessData()}}} in destructor, but it is preferable to use {{{Cpp::Events::ProcessInit}}} class instead of calling these functions directly, because it is exception-safe.
 
 *Example 1.* Per-process library initialization.
 {{{
+#include <Cpp/Events.hpp>
+
 int main(int argc, char * argv[])
 {
-    Cpp::Threading::ProcessInit processInit;
+    Cpp::Events::ProcessInit processInit;
 
     // ...
 
@@ -18,13 +20,13 @@ int main(int argc, char * argv[])
 }
 }}}
 
-For threads other than the main one, library must be initialized separately. The {{{Cpp::Threading::ThreadInit}}} class is used or this. In the same way as {{{Cpp::Threading::ProcessInit}}} does, this class does nothing more than invoking static function {{{Cpp::Threading::constructThreadData()}}} in constructor and {{{Cpp::Threading::destructThreadData()}}} in destructor.
+For threads other than the main one, library must be initialized separately. The {{{Cpp::Events::ThreadInit}}} class is used or this. In the same way as {{{Cpp::Events::ProcessInit}}} does, this class does nothing more than invoking static function {{{Cpp::Events::constructThreadData()}}} in constructor and {{{Cpp::Events::destructThreadData()}}} in destructor.
 
 *Example 2.* Per-thread library initialization.
 {{{
 void myThreadProc(void * threadParam)
 {
-    Cpp::Threading::ThreadInit threadInit;
+    Cpp::Events::ThreadInit threadInit;
     
     // all the thread stuff goes here ...
 
