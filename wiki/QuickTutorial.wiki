@@ -118,7 +118,7 @@ public:
    Cpp::EventRef<bool> toggled() { return toggled_; }
 private:
    bool isChecked_;
-   Cpp::EventRef<bool> toggled_;
+   Cpp::Event<bool> toggled_;
 };
 
 void CheckBox::setChecked(bool b)
@@ -146,11 +146,11 @@ public:
     int currentItem() const;
     void setCurrentItem(int i);
 
-    Cpp::EventRef<int, String const &> currentItemChanged();
+    Cpp::EventRef<int, String const &> currentItemChanged() { return currentItemChanged_; }
 private:
     std::vector<String> items_;
     int currentItemIndex_;
-    Cpp::EventRef<int, String const &> currentItemChanged_;
+    Cpp::Event<int, String const &> currentItemChanged_;
 };
 
 void ComboBox::setCurrentItem(int i)
