@@ -1,6 +1,30 @@
 #summary Comparison of another implementations of event/delegate mechanism
 
+<wiki:toc max_depth="2" />
+
 = Events and delegates in C# =
+
+C# has built-in support for event/delegate mechanism.
+
+Delegate types are declared using the {{{delegate}}} keyword.
+{{{
+namespace MyNamespace
+{
+    public delegate void TestDelegate(object obj);
+    public delegate float MathDelegate(float x);
+    public delegate void ClickDelegate(object sender, EventArgs e);
+}
+}}}
+All delegate types are classes implicitly inherited from the {{{System.MulticastDelegate}}} class:
+
+http://cpp-events.googlecode.com/svn/wiki/CSharpDelegateHierarchy.png
+
+Classes {{{System.Delegate}}} and {{{System.MulticastDelegate}}} are special classes that are used exclusively for deriving delegate types and cannot be used for deriving custom classes.
+
+Class {{{System.Delegate}}} implements abstract delegate class that encapsulates one invokable element (a static function, an instance method bound to specific instance or a closure, which are implemented in C# as anonymous delegates).
+
+Class {{{System.MulticastDelegate}}} implements abstract delegate class that contains list of elements that are invoked one by one. Internally it is implemented as a linked list of {{{System.Delegate}}} objects.
+
 = Signals and slots in Qt =
 = Boost.Signals =
 = LibSigC++ =
