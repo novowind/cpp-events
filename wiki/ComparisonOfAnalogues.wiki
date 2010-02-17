@@ -23,7 +23,15 @@ Classes {{{System.Delegate}}} and {{{System.MulticastDelegate}}} are special cla
 
 Class {{{System.Delegate}}} implements abstract delegate class that encapsulates one invokable element (a static function, an instance method bound to specific instance or a closure, which are implemented in C# as anonymous delegates).
 
-Class {{{System.MulticastDelegate}}} implements abstract delegate class that contains list of elements that are invoked one by one. Internally it is implemented as a linked list of {{{System.Delegate}}} objects.
+Class {{{System.MulticastDelegate}}} implements abstract delegate class that contains list of elements that are invoked one by one. Internally it is implemented as a linked list of {{{System.Delegate}}} objects. All user-defined delegates are multicast delegates.
+
+Multicast delegates can be concatenated or substracted using operations "+", "–", "+=" and "–=.
+
+When multicast delegate is invoked, all its elements are invoked in the order of appending. If multicast delegate returns a value, the value, returned by the last element, is returned.
+
+Delegate always contains at least one element. If list of elements becomes empty then delegate object is destroyed and variable, that used to reference that object is set to null.
+
+It is not valid to invoke delegate via null reference. Thus delegate reference should always be checked for null, before invoking delegate. This is a major inconvenience, that is often criticized by C# users. One of the possible reasons for such design is problem of undefined return value for empty non-void delegates, but this is just my personal assumption.
 
 = Signals and slots in Qt =
 = Boost.Signals =
