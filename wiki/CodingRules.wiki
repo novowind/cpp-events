@@ -12,7 +12,7 @@
   # Put all sources that belong to one project into separate directory. Organize project sources into subdirectories according to project internal structure. Group multiple projects into higher-level directories according to solution structure.
   # Include headers using paths relative to the solution root directory. Header paths should be taken into angle brackets, not in quotes. Do not use paths relative to current directory.
   # Protect C/C++ headers by header guard, do not use "#pragma once" (it is not portable).
-  # Header guard should be generated from header relative path by the following algorithm:
+  # Header guard should be generated from header path by the following algorithm:
     * All special characters ('.' and '/') are replaced by double underscore characters.
     * Single underscore character is inserted between separate words in path components.  
     * All characters are converted to uppercase.
@@ -40,16 +40,16 @@
   # Don’t use global variables and singletons. Use only global constants. Any use of singleton should be considered to be a dirty hack.
   # Avoid half-alive object state. Do not use post-constructor initialization.
   # Assignment operator should allow self-assignment.
-  # Assignment operator should return *this;
+  # Assignment operator should return {{{*this}}};
 
 = Coding Rules =
   # Use function-style cast for value types and keyword-cast for pointers and references.
   # Process exceptional conditions first. No not try to avoid multiple return points.
   # Prefer prefix increment and decrement to postfix ones if old value is not needed.
-  # Do not use long chains of member access operators (a->b->c->d->e), use intermediate variables.
+  # Do not use long chains of member access operators ({{{a->b->c->d->e}}}), use intermediate variables.
   # Do not declare variables beforehand. Declare variables when they can be initialized. If variable must be declared without initialization, then this should be noted in a brief comment.
   # Pass output arguments by pointer or via custom reference class, not by reference.
-  # Write const-keyword after type name, not before (e.g. "QString const &", but not "const QString &").
+  # Write const-keyword after type name, not before (e.g. {{{QString const &}}}, but not {{{const QString &}}}).
   # Do not use typedef struct and typedef enum in C++ code.
 
 = Code Formatting =
