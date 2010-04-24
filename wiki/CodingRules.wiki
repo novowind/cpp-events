@@ -1,0 +1,60 @@
+#summary Coding rules I use in my practice.
+
+= Project structure =
+
+  # Do not shorten file names.
+  # Use proper source file extensions according to programming language file is written in:
+    * .h/.c - for pure C
+    * .hpp/.cpp - for C++
+    * .hh/.mm - for Objective-C++
+    * .inl - for non-header files that should be included during preprocessing
+  # Include pure C headers into C++ code using helper C++ header (the same name, the same path if possible, different extension) that wraps pure C declarations into "extern C {}"-block.
+  # Put all sources that belong to one project into separate directory. Organize project sources into subdirectories according to project internal structure. Group multiple projects into higher-level directories according to solution structure.
+  # Include headers using paths relative to the solution root directory. Header paths should be taken into angle brackets, not in quotes. Do not use paths relative to current directory.
+  # Protect C/C++ headers by header guard, do not use "#pragma once" (it is not portable).
+  # Header guard should be generated from header relative path by the following algorithm:
+    * All special characters ('.' and '/') are replaced by double underscore characters.
+    * Single underscore character is inserted between separate words in path components.  
+    * All characters are converted to uppercase.
+    * Double underscore is prepended.
+  # Use #import-statement for Objective-C headers.
+  # Module private declarations should be placed in auxiliary header file with suffix ".Private" (e.g. "MyClass.Private.hpp").
+  # If precompiled header is used, it should be included into all header files as a first include, in order not to confuse code analysis tools.
+  # Precompiled header for dependent project should include precompiled headers of all used projects.
+  # Module private header should include corresponding public header as a first include.
+  # Include of the corresponding header (private if any, public otherwise) should be placed in the implementation file before all other includes except precompiled header, if any.
+  # TODO: What about paths for static libraries, DLLs and executables?
+  # TODO: What about paths for resources?
+
+= Class design =
+  # All member variables should be private if class has invariant, and public if class has not invariant. Do not use protected member variables.
+  # Do not return pointers/references to private data.
+  # Do not use default values for virtual functions, use inline non-virtual overloads instead.
+  # Destructor should be virtual, if class contains any virtual functions.
+  # Interface classes should have protected default constructor and protected virtual destructor.
+  # If class uses some compiler-generated members (default constructor, copy constructor, destructor, assignment operator) this should described in a comment.
+  # Never invoke virtual functions from constructor or destructor.
+  # Copy constructor and assignment operator should be disabled if class is not copyable.
+  # Use friends only for items that are logical parts of the class, but cannot be declared inside class. Do not use friend declarations for hacking access control.
+  # Use inner classes and enums, do not pollute global namespace.
+  # Don’t use global variables and singletons. Use only global constants. Any use of singleton should be considered to be a dirty hack.
+  # Avoid half-alive object state. Do not use post-constructor initialization.
+  # Assignment operator should allow self-assignment.
+  # Assignment operator should return *this;
+
+= Coding Rules =
+  # Use function-style cast for value types and keyword-cast for pointers and references.
+  # Process exceptional conditions first. No not try to avoid multiple return points.
+  # Prefer prefix increment and decrement to postfix ones if old value is not needed.
+  # Do not use long chains of member access operators (a->b->c->d->e), use intermediate variables.
+  # Do not declare variables beforehand. Declare variables when they can be initialized. If variable must be declared without initialization, then this should be noted in a brief comment.
+  # Pass output arguments by pointer or via custom reference class, not by reference.
+  # Write const-keyword after type name, not before (e.g. "QString const &", but not "const QString &").
+  # Do not use typedef struct and typedef enum in C++ code.
+
+= Code Formatting =
+  # Use tabs for logical indentation, use spaces for all other purposes.
+  # Indentation should be preserved for empty lines.
+  # All source files should end with empty line (configure IDE).
+  # Avoid extra spaces after line end.
+  # Do not align variable declarations into columns.
