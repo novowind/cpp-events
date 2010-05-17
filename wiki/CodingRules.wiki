@@ -18,7 +18,7 @@
     * All characters are converted to uppercase.
     * Double underscore is prepended.
   # Use #import-statement for Objective-C headers.
-  # Module private declarations should be placed in auxiliary header file with suffix ".Private" (e.g. "MyClass.Private.hpp").
+  # Module private declarations should be placed in auxiliary header file with suffix "-Private" (e.g. "MyClass-Private.hpp").
   # If precompiled header is used, it should be included into all header files as a first include, in order not to confuse code analysis tools.
   # Precompiled header for dependent project should include precompiled headers of all used projects.
   # Module private header should include corresponding public header as a first include.
@@ -45,16 +45,17 @@
 = Coding Rules =
   # Use function-style cast for value types and keyword-cast for pointers and references.
   # Process exceptional conditions first. No not try to avoid multiple return points.
-  # Prefer prefix increment and decrement to postfix ones if old value is not needed.
+  # Prefer prefix increment and decrement to postfix ones unless old value is needed.
   # Do not use long chains of member access operators ({{{a->b->c->d->e}}}), use intermediate variables.
   # Do not declare variables beforehand. Declare variables when they can be initialized. If variable must be declared without initialization, then this should be noted in a brief comment.
   # Pass output arguments by pointer or via custom reference class, not by reference.
   # Write const-keyword after type name, not before (e.g. {{{QString const &}}}, but not {{{const QString &}}}).
-  # Do not use typedef struct and typedef enum in C++ code.
+  # Do not use typedef struct and typedef enum in C++ code, only in plain C.
+  # Do not use {{{void}}} keyword for functions that do not take any argument.
 
 = Code Formatting =
   # Use tabs for logical indentation, use spaces for all other purposes.
   # Indentation should be preserved for empty lines.
   # All source files should end with empty line (configure IDE).
   # Avoid extra spaces after line end.
-  # Do not align variable declarations into columns.
+  # Do not try to align variable declarations into columns.
