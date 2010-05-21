@@ -43,6 +43,7 @@
   # Avoid half-alive object state. Do not use post-constructor initialization.
   # Assignment operator should allow self-assignment.
   # Assignment operator should return {{{*this}}};
+  # Always perform mirror operations (open/close, show/hide, create/delete) at the same logical level
 
 = Coding Rules =
   # All identifiers, comments and string literals should be written in English and should be syntactically and grammatically correct. Never user transliteration for any purposes.
