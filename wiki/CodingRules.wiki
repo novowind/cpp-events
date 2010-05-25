@@ -84,7 +84,8 @@
   # Put items of initialization list in the declaration order. Base classes before fields.
   # Initialize pointers to null value using default constructor syntax rather then explicitly initializing by "NULL" or "0".
   # Always use single line comments ("//"-eol), do not use multi-line comments ("/*"-"*/"), because they cannot be nested.
-    
+  # Use [NSObject respondsToSelector:] only for checking for optional protocol methods.
+
 = Code Formatting =
   # Use tabs for logical indentation, use spaces for all other purposes.
   # Indentation should be preserved for empty lines.
