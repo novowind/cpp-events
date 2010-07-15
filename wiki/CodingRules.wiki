@@ -84,6 +84,8 @@
   # Put items of initialization list in the declaration order. Base classes before fields.
   # Initialize pointers to null value using default constructor syntax rather then explicitly initializing by "NULL" or "0".
   # Always use single line comments ("//"-eol), do not use multi-line comments ("/*"-"*/"), because they cannot be nested.
+  # Do not compare boolean variables/expressions with boolean literals (wrong: {{{if(enabled == true) ...}}}, right: {{{if(enabled) ...}}}).
+  # Avoid implicit casting to boolean (wrong: {{{if(ptr) ...}}}, right: {{{if(ptr != null) ...}}}
   # Use {{{[NSObject respondsToSelector:]}}} only for checking for optional protocol methods.
 
 = Code Formatting =
