@@ -337,7 +337,7 @@ private:
 
 = Virtual Events =
 
-Function that provides connection management interface for the event can be virtual and abstract (pure virtual) as any other instance member function. This effectively makes event virtual or abstract. 
+Function that provides connection management interface for the event can be virtual and abstract (pure virtual) as any other instance member function. This effectively makes event virtual or abstract. This allows events to be used in interface classes (i.e. classes containing only pure virtual functions and no data).
 
 *Example 12.* Worker thread interface.
 {{{
