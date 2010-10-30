@@ -96,9 +96,15 @@
   # All source files should end with empty line (configure IDE).
   # Avoid extra spaces after line end.
   # Do not try to align variable declarations into columns.
-  # Do not indent namespace contents if entire file belongs to that namespace
   # Put space both before and after asterisk/ampersand in pointer/reference declarations. (wrong: {{{int *p = 0}}}, {{{int *p = 0}}}; right: {{{int * p = 0}}}).
   # No space before column (labels, case statements, access keywords)
   # No space before or after parenthesis (wrong: {{{( a + ( c * b ) )}}}; right: {{{(a + (c * b))}}}).
+  # No space after keywords *if*, *while* and *for* (before parenthesis).
+  # Space before and after binary operators.
+  # No space after prefix unary operator.
+  # No space before postfix unary operator.
+  # Space before and after '?' and ':' in ternary operator.
+  # No space before or after '.' or '->'.
+  # Do not indent namespace contents if entire file belongs to that namespace.
   # Indent initializer list.
   # Place initial colon and delimiting commas in initializer list at the beginning of the new line.
