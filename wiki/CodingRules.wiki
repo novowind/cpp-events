@@ -29,6 +29,7 @@
   # TODO: What about paths for resources?
 
 = Class design =
+  # Name classes in singular (wrong: {{{MyItems}}}, right: {{{MyItemList}}}).
   # All member variables should be private if class has invariant, and public if class has not invariant. Do not use protected member variables.
   # Do not return pointers/references to private data.
   # Do not use default values for virtual functions, use inline non-virtual overloads instead.
@@ -80,12 +81,13 @@
     # Properties (get/set methods)
     # Other instance methods.
     # Qt slots
+  # Outlined implementations should go in the same order as corresponding declarations.
   # All fields and non-interface base classes should be explicitly initialized in initializer list, even if initialized with default constructor. But do pollute initializer list with initialization of interface base classes.
   # Put items of initialization list in the declaration order. Base classes before fields.
   # Initialize pointers to null value using default constructor syntax rather then explicitly initializing by "NULL" or "0".
   # Always use single line comments ("//"-eol), do not use multi-line comments ("/*"-"*/"), because they cannot be nested.
   # Do not compare boolean variables/expressions with boolean literals (wrong: {{{if(enabled == true) ...}}}, right: {{{if(enabled) ...}}}).
-  # Avoid implicit casting to boolean (wrong: {{{if(ptr) ...}}}, right: {{{if(ptr != null) ...}}}
+  # Avoid implicit casting pointers and integers to boolean (wrong: {{{if(ptr) ...}}}, right: {{{if(ptr != null) ...}}}).
   # Use {{{[NSObject respondsToSelector:]}}} only for checking for optional protocol methods.
 
 = Code Formatting =
@@ -97,3 +99,6 @@
   # Do not indent namespace contents if entire file belongs to that namespace
   # Put space both before and after asterisk/ampersand in pointer/reference declarations. (wrong: {{{int *p = 0}}}, {{{int *p = 0}}}; right: {{{int * p = 0}}}).
   # No space before column (labels, case statements, access keywords)
+  # No space before or after parenthesis (wrong: {{{( a + ( c * b ) )}}}; right: {{{(a + (c * b))}}}).
+  # Indent initializer list.
+  # Place initial colon and delimiting commas in initializer list at the beginning of the new line.
