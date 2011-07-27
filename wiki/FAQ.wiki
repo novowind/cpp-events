@@ -22,3 +22,11 @@ If you still wish to use events with global objects, then you should:
 Library is written in C++03 and does not use C++0x features. For generating
 variadic templates custom preprocessor was written. It was named MCS, that
 stands for Monkey Coding Script;) MCS is [http://code.google.com/p/monkey-coding-script hosted] on Google Code as separate project. Repository of the MCS is included into repository of CppEvents via svn:externals in read-only mode.
+
+*5. If an event is triggered from a thread A, and that event is connected to a delegate from a class instance created in thread B, where is that delegate executed? Thread A or thread B?*
+
+Library have no knowledge about thread affinity of the objects. So it cannot know that event should be delivered in another thread. Also such mechanism would require event queue and run loop that are platform-dependent. So currently delegates are always executed in the same thread that triggered that event (thread A). If event should be handled in different thread, then it is responsibility of the delegate to enqueue required information into queue for processing in different thread.
+
+*6. Are there any plans for queued delivery of the events?*
+
+Yes, there are. This will be the goal of the version 1.1. Currently I'm not able to make any predictions about release date. Implementation will not contain any implementation of the event queue (except for unit-testing purposes), but instead provide an abstract interface that would allow writing adapter for concrete event queue system. Operations with event queue usually require thread synchronization, so they are pretty slow, virtual call won't create much overhead here. Also, it would be possible to invoke delegates via queue without need to connect them to events.
